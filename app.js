@@ -12,6 +12,12 @@ loadEventListeners();
 function loadEventListeners() {
   // 添加任务事件
   form.addEventListener("submit", addTask);
+  // 清除任务事件（单个）
+  taskList.addEventListener("click", removeTask);
+  // 清除所有任务
+  clearBtn.addEventListener("click", clearTasks);
+  // 过滤任务
+  filter.addEventListener("keyup", filterTasks);
 }
 
 // addTask
@@ -39,4 +45,36 @@ function addTask(e) {
     taskInput.value = "";
   }
   e.preventDefault();
+}
+
+// removeTask
+function removeTask(e) {
+  if (e.target.parentElement.classList.contains("delete-item")) {
+    if (confirm("Are You Sure?")) e.target.parentElement.parentElement.remove();
+  }
+}
+
+// clearTasks
+function clearTasks() {
+  // 方法一
+  // taskList.innerHTML = "";
+
+  // 方法二(更快)
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.firstChild);
+  }
+}
+
+// fliterTasks
+function filterTasks(e) {
+  const text = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".collection-item").forEach(function(task) {
+    const item = task.firstChild.textContent;
+    if (item.toLowerCase().indexOf(text) != -1) {
+      task.style.display = "block";
+    } else {
+      task.style.display = "none";
+    }
+  });
 }
